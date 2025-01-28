@@ -1,13 +1,17 @@
 package com.eddie.Controller;
 
 import com.eddie.model.User;
+import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
+import java.util.Objects;
+
 public class UserController {
-    public static void openingSession(){
+    public static void openingSession() {
         SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
 //    addUser(factory,session);
@@ -16,7 +20,8 @@ public class UserController {
 //    deleteUser(session,4);
 
     }
-    public static void addUser(){
+
+    public static void addUser() {
         SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -58,7 +63,8 @@ public class UserController {
         factory.close();
         session.close();
     }
-    public static void findUser(int userId){
+
+    public static void findUser(int userId) {
         SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
@@ -73,7 +79,8 @@ public class UserController {
         session.close();
 
     }
-    public static void updateUser(int userId){
+
+    public static void updateUser(int userId) {
         SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
@@ -88,7 +95,8 @@ public class UserController {
         session.close();
 
     }
-    public static void deleteUser(int userId){
+
+    public static void deleteUser(int userId) {
         SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
@@ -100,4 +108,81 @@ public class UserController {
         factory.close();
     }
 
+    public static void findUserHql() {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+
+        String hqlFrom = "FROM User";
+        String hqlSelect = "SELECT u FROM User u";
+        TypedQuery<User> query = session.createQuery(hqlSelect, User.class);
+        List<User> results = query.getResultList();
+        System.out.printf("%s%13s%17s%34s%n", "|User Id", "|Full name", "|Email", "|Password");
+        for (User u : results) {
+            System.out.printf(" %-10d %-20s %-30s %s %n", u.getId(), u.getFullName(), u.getEmail(), u.getPassword());
+        }
+    }
+
+    public static void getRecordbyId() {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+        String hql = "FROM User u WHERE u.id > 2 ORDER BY u.salary DESC";
+        TypedQuery<User> query = session.createQuery(hql, User.class);
+        List<User> results = query.getResultList();
+        System.out.printf("%s%13s%17s%34s%21s%n", "|User Id", "|Full name", "|Email", "|Password", "|Salary");
+        for (User u : results) {
+            System.out.printf(" %-10d %-20s %-30s %-23s %s %n", u.getId(), u.getFullName(), u.getEmail(), u.getPassword(), u.getSalary());
+        }
+    }
+
+    public static void getRecords() {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+        TypedQuery<Object[]> query = session.createQuery(
+                "SELECT U.salary, U.fullName FROM User AS U", Object[].class);
+        List<Object[]> results = query.getResultList();
+        System.out.printf("%s%13s%n", "Salary", "City");
+        for (Object[] a : results) {
+            System.out.printf("%-16s%s%n", a[0], a[1]);
+        }
+    }
+    public static void getMaxSalary(){
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+
+        String hql =
+                "SELECT max(U.salary) FROM User U";
+        TypedQuery<Object> query = session.createQuery(hql,Object.class);
+        Object result = query.getResultList();
+        System.out.printf("%s%s","Maximum Salary:",result);
+    }
+    public void   getmaxSalaryGroupBy()
+    {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+        String hql = "SELECT SUM(U.salary), U.city FROM User U GROUP BY U.city";
+        TypedQuery query = session.createQuery(hql);
+        List<Object[]> result =query.getResultList();
+        for (Object[] o : result) {
+            System.out.println("Total salary " +o[0] +" | city: "+ o[1] );
+        }
+    }
+    public static void namedQueryExample(){
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+        String hql = "FROM User u WHERE u.id = :id";
+        TypedQuery<User> query = session.createQuery(hql, User.class);
+        query.setParameter("id", 2);
+        List<User> result = query.getResultList();
+
+        System.out.printf("%s%13s%17s%34s%21s%n", "|User Id", "|Full name", "|Email", "|Password", "|Salary");
+        for (User u : result) {
+            System.out.printf(" %-10d %-20s %-30s %-23s %s %n", u.getId(), u.getFullName(), u.getEmail(), u.getPassword(), u.getSalary());
+        }
+    }
+
+
+
+
 }
+
+

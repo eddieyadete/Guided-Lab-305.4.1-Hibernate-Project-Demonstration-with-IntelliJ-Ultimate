@@ -14,6 +14,7 @@ public class User {
     private String email;
     private String password;
     private int age;
+    @Column(name = "salary", nullable = false)
     private double salary;
     private String city;
 

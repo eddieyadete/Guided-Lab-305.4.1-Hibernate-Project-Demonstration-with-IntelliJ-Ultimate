@@ -15,6 +15,14 @@ public class Main {
 //        UserController.addUser();
 //        UserController.findUser(3);
 //        UserController.updateUser(3);
-        UserController.deleteUser(4);
+//        UserController.deleteUser(4);
+//        UserController.findUserHql();
+//        UserController.getRecordbyId();
+//        UserController.getRecords();
+//        UserController.getMaxSalary();
+//UserController u = new UserController();
+//u.getmaxSalaryGroupBy();
+        UserController.namedQueryExample();
+
         }
     }
