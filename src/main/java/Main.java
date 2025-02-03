@@ -1,8 +1,4 @@
-package com.eddie;
-
 import com.eddie.Controller.UserController;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -17,12 +13,12 @@ public class Main {
 //        UserController.updateUser(3);
 //        UserController.deleteUser(4);
 //        UserController.findUserHql();
-//        UserController.getRecordbyId();
+        UserController.getRecordbyId();
 //        UserController.getRecords();
 //        UserController.getMaxSalary();
 //UserController u = new UserController();
 //u.getmaxSalaryGroupBy();
-        UserController.namedQueryExample();
+//        UserController.namedQueryExample();
 
         }
     }
